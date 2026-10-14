@@ -1,6 +1,6 @@
 {
   "name": "gladys-bring",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Bring! shopping lists for Gladys Assistant: lists on the dashboard, add and check off items, scene actions and scene triggers. Unofficial, not affiliated with Bring! Labs.",
   "type": "module",

@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-14
+
 ### Added
 
 - Sign-in to a Bring! account with its email and password (sent to Bring!
@@ -26,3 +28,6 @@ the notes of the version's GitHub Release.
 - Item names translated both ways with the Bring! catalog: "lait" is added
   as the catalog article "Milch" and shown as "Lait".
 - "Test the account" button.
+
+[Unreleased]: https://github.com/LM1LC3N7/gladys-bring/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/LM1LC3N7/gladys-bring/releases/tag/v0.1.1
