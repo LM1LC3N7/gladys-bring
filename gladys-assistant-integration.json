@@ -1,0 +1,406 @@
+{
+  "manifest_version": 1,
+  "type": "provider",
+  "name": "Bring!",
+  "description": {
+    "en": "Unofficial connector: your Bring! shopping lists on the dashboard and in your scenes.",
+    "fr": "Connecteur non officiel : vos listes de courses Bring! sur le tableau de bord et les scènes."
+  },
+  "version": "0.1.0",
+  "docker_image": "ghcr.io/lm1lc3n7/gladys-bring:0.1.0",
+  "gladys_version": ">=5.1.0",
+  "cover_image": "https://raw.githubusercontent.com/LM1LC3N7/gladys-bring/main/cover.png",
+  "categories": ["services"],
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": { "en": "Bring! shopping lists", "fr": "Listes de courses Bring!" },
+      "description": {
+        "en": "Unofficial connector, not affiliated with Bring! Labs. It signs in to your Bring! account like the Bring! web app does, with your email and password: the password is sent only to Bring! (api.getbring.com), stored encrypted by Gladys and never logged. You get a dashboard widget per list (items to buy, add, check off), scene actions (add, check off or remove an item, read a list) and scene triggers (item added, item checked off, list emptied). Bring! has no public API: this connector uses the one of its web app, which Bring! may change at any time.",
+        "fr": "Connecteur non officiel, sans lien avec Bring! Labs. Il se connecte à votre compte Bring! comme l'application web Bring!, avec votre e-mail et votre mot de passe : le mot de passe n'est envoyé qu'à Bring! (api.getbring.com), stocké chiffré par Gladys et jamais journalisé. Vous obtenez un widget par liste (articles à acheter, ajout, cocher), des actions de scène (ajouter, cocher ou retirer un article, lire une liste) et des déclencheurs de scène (article ajouté, article coché, liste vidée). Bring! n'a pas d'API publique : ce connecteur utilise celle de son application web, que Bring! peut changer à tout moment."
+      },
+      "links": [
+        {
+          "url": "https://www.getbring.com/",
+          "label": {
+            "en": "Bring! (the shopping list app)",
+            "fr": "Bring! (l'application de listes de courses)"
+          }
+        },
+        {
+          "url": "https://github.com/LM1LC3N7/gladys-bring/blob/main/docs/fr.md",
+          "label": { "en": "Guide (French)", "fr": "Guide (français)" }
+        },
+        {
+          "url": "https://github.com/LM1LC3N7/gladys-bring/blob/main/docs/en.md",
+          "label": { "en": "Guide (English)", "fr": "Guide (anglais)" }
+        }
+      ]
+    },
+    {
+      "key": "email",
+      "type": "string",
+      "label": { "en": "Bring! account email", "fr": "E-mail du compte Bring!" },
+      "required": true,
+      "placeholder": { "en": "you@example.com", "fr": "vous@exemple.fr" }
+    },
+    {
+      "key": "password",
+      "type": "secret",
+      "label": { "en": "Bring! account password", "fr": "Mot de passe du compte Bring!" },
+      "description": {
+        "en": "Sent only to Bring!. An account opened with Google or Apple sign-in may have no password: see the guide.",
+        "fr": "Envoyé uniquement à Bring!. Un compte ouvert avec Google ou Apple peut ne pas avoir de mot de passe : voir le guide."
+      },
+      "required": true
+    },
+    {
+      "key": "watch_lists",
+      "type": "boolean",
+      "label": {
+        "en": "Watch the lists (needed by the scene triggers)",
+        "fr": "Surveiller les listes (nécessaire aux déclencheurs de scène)"
+      },
+      "description": {
+        "en": "Reads the lists in the background so that \"item added\", \"item checked off\" and \"list emptied\" work. Off: no background call, the widget and the scene actions read a list when they need it.",
+        "fr": "Lit les listes en arrière-plan pour que « article ajouté », « article coché » et « liste vidée » fonctionnent. Désactivé : aucun appel en arrière-plan, le widget et les actions de scène lisent une liste quand ils en ont besoin."
+      },
+      "required": false,
+      "default": true
+    },
+    {
+      "key": "poll_minutes",
+      "type": "number",
+      "label": {
+        "en": "Refresh interval (minutes)",
+        "fr": "Intervalle de rafraîchissement (minutes)"
+      },
+      "description": {
+        "en": "How often each watched list is read. A change made through Gladys is read back right away.",
+        "fr": "Fréquence de lecture de chaque liste surveillée. Une modification faite depuis Gladys est relue aussitôt."
+      },
+      "required": false,
+      "default": 2,
+      "min": 1,
+      "max": 60
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "timeout_seconds": 30,
+      "label": { "en": "Test the account", "fr": "Tester le compte" },
+      "description": {
+        "en": "Signs in to Bring! and shows your lists, their number of items to buy and their article language.",
+        "fr": "Se connecte à Bring! et affiche vos listes, leur nombre d'articles à acheter et leur langue d'articles."
+      }
+    }
+  ],
+  "widgets": [
+    {
+      "key": "shopping_list",
+      "label": { "en": "Bring! shopping list", "fr": "Liste de courses Bring!" },
+      "description": {
+        "en": "The items to buy of a Bring! list, with buttons to add and check off items.",
+        "fr": "Les articles à acheter d'une liste Bring!, avec des boutons pour ajouter et cocher."
+      },
+      "icon": "shopping-cart",
+      "action_timeout_seconds": 30,
+      "settings": [
+        {
+          "key": "list",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "List name (empty: your default list)",
+            "fr": "Nom de la liste (vide : votre liste par défaut)"
+          },
+          "placeholder": { "en": "Groceries", "fr": "Courses" }
+        },
+        {
+          "key": "quick_item",
+          "type": "string",
+          "required": false,
+          "label": { "en": "One-tap item (optional)", "fr": "Article en un clic (facultatif)" },
+          "description": {
+            "en": "Adds a button that puts this item on the list in one tap.",
+            "fr": "Ajoute un bouton qui met cet article sur la liste en un clic."
+          },
+          "placeholder": { "en": "Milk", "fr": "Lait" }
+        }
+      ]
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "item_added",
+      "label": { "en": "Bring! item added", "fr": "Article Bring! ajouté" },
+      "description": {
+        "en": "An item was added to a Bring! list, in the app or by someone sharing the list. Needs the lists watched.",
+        "fr": "Un article a été ajouté à une liste Bring!, dans l'application ou par une personne qui partage la liste. Nécessite la surveillance des listes."
+      },
+      "fields": [
+        {
+          "key": "list",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "List name, as in Bring! (empty: any)",
+            "fr": "Nom de la liste, comme dans Bring! (vide : toutes)"
+          }
+        },
+        {
+          "key": "item",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "Item, as Bring! shows it (empty: any)",
+            "fr": "Article, tel que Bring! l'affiche (vide : tous)"
+          }
+        }
+      ],
+      "variables": [
+        { "key": "list", "type": "string", "label": { "en": "List", "fr": "Liste" } },
+        { "key": "item", "type": "string", "label": { "en": "Item", "fr": "Article" } },
+        {
+          "key": "specification",
+          "type": "string",
+          "label": { "en": "Details", "fr": "Précision" }
+        },
+        {
+          "key": "count",
+          "type": "number",
+          "label": { "en": "Items to buy", "fr": "Articles à acheter" }
+        }
+      ]
+    },
+    {
+      "key": "item_checked_off",
+      "label": { "en": "Bring! item checked off", "fr": "Article Bring! coché" },
+      "description": {
+        "en": "An item of a Bring! list was checked off (bought). A removed item does not count. Needs the lists watched.",
+        "fr": "Un article d'une liste Bring! a été coché (acheté). Un article supprimé ne compte pas. Nécessite la surveillance des listes."
+      },
+      "fields": [
+        {
+          "key": "list",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "List name, as in Bring! (empty: any)",
+            "fr": "Nom de la liste, comme dans Bring! (vide : toutes)"
+          }
+        },
+        {
+          "key": "item",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "Item, as Bring! shows it (empty: any)",
+            "fr": "Article, tel que Bring! l'affiche (vide : tous)"
+          }
+        }
+      ],
+      "variables": [
+        { "key": "list", "type": "string", "label": { "en": "List", "fr": "Liste" } },
+        { "key": "item", "type": "string", "label": { "en": "Item", "fr": "Article" } },
+        {
+          "key": "specification",
+          "type": "string",
+          "label": { "en": "Details", "fr": "Précision" }
+        },
+        {
+          "key": "count",
+          "type": "number",
+          "label": { "en": "Items left to buy", "fr": "Articles restant à acheter" }
+        }
+      ]
+    },
+    {
+      "key": "list_emptied",
+      "label": { "en": "Bring! list emptied", "fr": "Liste Bring! vidée" },
+      "description": {
+        "en": "The last item to buy of a Bring! list was checked off or removed: the shopping is done. Needs the lists watched.",
+        "fr": "Le dernier article à acheter d'une liste Bring! a été coché ou retiré : les courses sont faites. Nécessite la surveillance des listes."
+      },
+      "fields": [
+        {
+          "key": "list",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "List name, as in Bring! (empty: any)",
+            "fr": "Nom de la liste, comme dans Bring! (vide : toutes)"
+          }
+        }
+      ],
+      "variables": [
+        { "key": "list", "type": "string", "label": { "en": "List", "fr": "Liste" } },
+        {
+          "key": "previous_count",
+          "type": "number",
+          "label": { "en": "Items before", "fr": "Articles avant" }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "add_item",
+      "label": { "en": "Add an item to Bring!", "fr": "Ajouter un article à Bring!" },
+      "description": {
+        "en": "Puts an item on a Bring! list. A name of the Bring! catalog in the list's language (\"milk\", \"lait\") becomes the catalog article, with its icon; any other text is added as is.",
+        "fr": "Met un article sur une liste Bring!. Un nom du catalogue Bring! dans la langue de la liste (« lait », « milk ») devient l'article du catalogue, avec son icône ; tout autre texte est ajouté tel quel."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "list",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "List name (empty: your default list)",
+            "fr": "Nom de la liste (vide : votre liste par défaut)"
+          }
+        },
+        {
+          "key": "item",
+          "type": "string",
+          "required": true,
+          "label": { "en": "Item", "fr": "Article" },
+          "placeholder": { "en": "Milk", "fr": "Lait" }
+        },
+        {
+          "key": "specification",
+          "type": "string",
+          "required": false,
+          "label": { "en": "Details (optional)", "fr": "Précision (facultatif)" },
+          "placeholder": { "en": "2 l", "fr": "2 l" }
+        }
+      ],
+      "outputs": [
+        { "key": "list", "type": "string", "label": { "en": "List", "fr": "Liste" } },
+        {
+          "key": "item",
+          "type": "string",
+          "label": { "en": "Item, as Bring! shows it", "fr": "Article, tel que Bring! l'affiche" }
+        },
+        {
+          "key": "count",
+          "type": "number",
+          "label": { "en": "Items to buy", "fr": "Articles à acheter" }
+        }
+      ]
+    },
+    {
+      "key": "complete_item",
+      "label": { "en": "Check off a Bring! item", "fr": "Cocher un article Bring!" },
+      "description": {
+        "en": "Marks an item of a Bring! list as bought (it moves to the recent items). \"Done\" is false when the item was not on the list.",
+        "fr": "Marque un article d'une liste Bring! comme acheté (il passe dans les articles récents). « Fait » est faux si l'article n'était pas sur la liste."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "list",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "List name (empty: your default list)",
+            "fr": "Nom de la liste (vide : votre liste par défaut)"
+          }
+        },
+        {
+          "key": "item",
+          "type": "string",
+          "required": true,
+          "label": { "en": "Item", "fr": "Article" }
+        }
+      ],
+      "outputs": [
+        { "key": "list", "type": "string", "label": { "en": "List", "fr": "Liste" } },
+        { "key": "item", "type": "string", "label": { "en": "Item", "fr": "Article" } },
+        { "key": "done", "type": "boolean", "label": { "en": "Done", "fr": "Fait" } },
+        {
+          "key": "count",
+          "type": "number",
+          "label": { "en": "Items left to buy", "fr": "Articles restant à acheter" }
+        }
+      ]
+    },
+    {
+      "key": "remove_item",
+      "label": { "en": "Remove a Bring! item", "fr": "Retirer un article Bring!" },
+      "description": {
+        "en": "Removes an item from a Bring! list without marking it bought. \"Done\" is false when the item was not on the list.",
+        "fr": "Retire un article d'une liste Bring! sans le marquer acheté. « Fait » est faux si l'article n'était pas sur la liste."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "list",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "List name (empty: your default list)",
+            "fr": "Nom de la liste (vide : votre liste par défaut)"
+          }
+        },
+        {
+          "key": "item",
+          "type": "string",
+          "required": true,
+          "label": { "en": "Item", "fr": "Article" }
+        }
+      ],
+      "outputs": [
+        { "key": "list", "type": "string", "label": { "en": "List", "fr": "Liste" } },
+        { "key": "item", "type": "string", "label": { "en": "Item", "fr": "Article" } },
+        { "key": "done", "type": "boolean", "label": { "en": "Done", "fr": "Fait" } },
+        {
+          "key": "count",
+          "type": "number",
+          "label": { "en": "Items left to buy", "fr": "Articles restant à acheter" }
+        }
+      ]
+    },
+    {
+      "key": "get_list",
+      "label": { "en": "Read a Bring! list", "fr": "Lire une liste Bring!" },
+      "description": {
+        "en": "The items to buy of a Bring! list, for a message or a condition that follows.",
+        "fr": "Les articles à acheter d'une liste Bring!, pour un message ou une condition qui suit."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "list",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "List name (empty: your default list)",
+            "fr": "Nom de la liste (vide : votre liste par défaut)"
+          }
+        }
+      ],
+      "outputs": [
+        { "key": "list", "type": "string", "label": { "en": "List", "fr": "Liste" } },
+        {
+          "key": "count",
+          "type": "number",
+          "label": { "en": "Items to buy", "fr": "Articles à acheter" }
+        },
+        {
+          "key": "items",
+          "type": "string",
+          "label": {
+            "en": "Items, separated by commas",
+            "fr": "Articles, séparés par des virgules"
+          }
+        }
+      ]
+    }
+  ]
+}

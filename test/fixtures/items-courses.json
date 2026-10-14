@@ -1,0 +1,45 @@
+{
+  "uuid": "11111111-aaaa-4bbb-8ccc-000000000001",
+  "status": "SHARED",
+  "items": {
+    "purchase": [
+      {
+        "uuid": "a0000001-0000-4000-8000-000000000001",
+        "itemId": "Milch",
+        "specification": "2 l",
+        "attributes": []
+      },
+      {
+        "uuid": "a0000001-0000-4000-8000-000000000002",
+        "itemId": "Brot",
+        "specification": "",
+        "attributes": [
+          {
+            "type": "PURCHASE_CONDITIONS",
+            "content": { "urgent": true, "convenient": false, "discounted": false }
+          }
+        ]
+      },
+      {
+        "uuid": "a0000001-0000-4000-8000-000000000003",
+        "itemId": "Ampoules LED",
+        "specification": "E27",
+        "attributes": []
+      }
+    ],
+    "recently": [
+      {
+        "uuid": "a0000001-0000-4000-8000-000000000004",
+        "itemId": "Eier",
+        "specification": "",
+        "attributes": []
+      },
+      {
+        "uuid": "a0000001-0000-4000-8000-000000000005",
+        "itemId": "Kaffee",
+        "specification": "",
+        "attributes": []
+      }
+    ]
+  }
+}

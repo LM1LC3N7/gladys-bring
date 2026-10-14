@@ -1,0 +1,9 @@
+{
+  "uuid": "11111111-aaaa-4bbb-8ccc-000000000001",
+  "status": "SHARED",
+  "purchase": [
+    { "name": "Milch", "specification": "2 l" },
+    { "name": "Ampoules LED", "specification": "" }
+  ],
+  "recently": [{ "name": "Eier", "specification": "" }]
+}

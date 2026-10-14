@@ -1,0 +1,10 @@
+{
+  "userUuid": "9a4e2f10-1c2d-4e5f-8a9b-0c1d2e3f4a5b",
+  "publicUserUuid": "5b4a3f2e-1d0c-4b9a-8f7e-6d5c4b3a2f1e",
+  "email": "user@example.com",
+  "emailVerified": true,
+  "name": "Alex",
+  "photoPath": "",
+  "premiumConfiguration": { "hasPremium": false, "hideSponsoredProducts": false },
+  "userLocale": { "language": "fr", "country": "FR" }
+}

@@ -1,0 +1,15 @@
+{
+  "uuid": "22222222-aaaa-4bbb-8ccc-000000000002",
+  "status": "REGISTERED",
+  "items": {
+    "purchase": [
+      {
+        "uuid": "b0000002-0000-4000-8000-000000000001",
+        "itemId": "Bier",
+        "specification": "6",
+        "attributes": []
+      }
+    ],
+    "recently": []
+  }
+}

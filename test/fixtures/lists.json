@@ -1,0 +1,14 @@
+{
+  "lists": [
+    {
+      "listUuid": "11111111-aaaa-4bbb-8ccc-000000000001",
+      "name": "Courses",
+      "theme": "ch.publisheria.bring.theme.home"
+    },
+    {
+      "listUuid": "22222222-aaaa-4bbb-8ccc-000000000002",
+      "name": "Weekend",
+      "theme": "ch.publisheria.bring.theme.party"
+    }
+  ]
+}

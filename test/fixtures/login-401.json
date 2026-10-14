@@ -1,0 +1,6 @@
+{
+  "message": "email password combination not existing",
+  "error": "unauthorized",
+  "error_description": "Not authorized to access this resource",
+  "errorcode": 200
+}

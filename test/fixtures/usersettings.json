@@ -1,0 +1,19 @@
+{
+  "usersettings": [
+    { "key": "autoPush", "value": "ON" },
+    { "key": "defaultListUUID", "value": "11111111-aaaa-4bbb-8ccc-000000000001" }
+  ],
+  "userlistsettings": [
+    {
+      "listUuid": "11111111-aaaa-4bbb-8ccc-000000000001",
+      "usersettings": [
+        { "key": "listSectionOrder", "value": "[\"Früchte & Gemüse\",\"Milch & Käse\"]" },
+        { "key": "listArticleLanguage", "value": "fr-FR" }
+      ]
+    },
+    {
+      "listUuid": "22222222-aaaa-4bbb-8ccc-000000000002",
+      "usersettings": [{ "key": "listArticleLanguage", "value": "en-US" }]
+    }
+  ]
+}
