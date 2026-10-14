@@ -23,9 +23,9 @@
 - [ ] An item checked off keeps its `itemId` in `recently` (the "item checked
       off" trigger relies on it) and adding an item already in `recently`
       moves it back.
-- [ ] `X-BRING-CLIENT: webApp` is accepted with the API key (the library now
-      sends `android`); the sign-in also works with the headers (verified
-      only for the error answers: 400 "Invalid Email.", 401 JSON).
+- [ ] The headers of the bring-api library (`X-BRING-CLIENT: android` with
+      the public API key) work for a real account; verified only for the
+      error answers (400 "Invalid Email.", 401 JSON).
 - [ ] `expires_in` of the access token, and whether the refresh token rotates
       (the integration saves a new one when it comes).
 - [ ] `bringusersettings/{uuid}` gives `listArticleLanguage` for every list,

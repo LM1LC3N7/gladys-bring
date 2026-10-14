@@ -90,7 +90,7 @@ test('first start: signs in, keeps the session, reads every list, fires nothing'
   assert.equal(login.path, '/rest/v2/bringauth');
   assert.deepEqual(login.form, { email: 'user@example.com', password: PASSWORD });
   assert.equal(login.headers['X-BRING-API-KEY'], 'cof4Nc6D8saplXjE3h3HXqHH8m7VU2i1Gs0g85Sp');
-  assert.equal(login.headers['X-BRING-CLIENT'], 'webApp');
+  assert.equal(login.headers['X-BRING-CLIENT'], 'android');
   assert.equal(login.headers['X-BRING-APPLICATION'], 'bring');
   // The session is kept off-schema, without the password nor the access token.
   assert.deepEqual(session(gladys), {

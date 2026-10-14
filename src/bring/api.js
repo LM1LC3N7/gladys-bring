@@ -102,7 +102,9 @@ export class BringClient {
   headers({ signIn = false } = {}) {
     const headers = {
       'X-BRING-API-KEY': API_KEY,
-      'X-BRING-CLIENT': 'webApp',
+      // The header the bring-api library (Home Assistant) sends every day: the
+      // best-tested combination with this API key.
+      'X-BRING-CLIENT': 'android',
       'X-BRING-APPLICATION': 'bring',
       'X-BRING-COUNTRY': this.country,
     };
