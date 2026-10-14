@@ -58,10 +58,12 @@ modifications faites depuis Gladys (action de scène, widget) ne déclenchent
 rien, pour qu'une scène ne puisse pas boucler à travers l'intégration.
 
 Les actions renvoient des valeurs pour les étapes suivantes : **ajouter un
-article** donne `{{item}}` et `{{count}}`, **cocher** et **retirer** donnent
-`{{done}}` (faux si l'article n'était pas sur la liste), **lire une liste**
-donne `{{count}}` et `{{items}}` (« Lait (2 l), Pain, Oeufs »), pratique dans
-un message.
+article** donne `item` et `count`, **cocher** et **retirer** donnent `done`
+(faux si l'article n'était pas sur la liste), **lire une liste** donne
+`count` et `items` (« Lait (2 l), Pain, Oeufs »), pratique dans un message.
+Les actions suivantes de la scène les trouvent dans leur liste de variables
+(écrites `{{<étape>.<action>.<clé>}}`, par exemple `{{0.0.items}}` quand
+**lire une liste** est la première action de la scène).
 
 ## Rythme
 

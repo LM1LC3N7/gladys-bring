@@ -56,9 +56,12 @@ Gladys (a scene action, the widget) fire no trigger, so a scene cannot loop
 through the integration.
 
 The actions return values for the steps that follow: **add an item** gives
-`{{item}}` and `{{count}}`, **check off** and **remove** give `{{done}}`
-(false when the item was not on the list), **read a list** gives `{{count}}`
-and `{{items}}` ("Milk (2 l), Bread, Eggs"), handy in a message.
+`item` and `count`, **check off** and **remove** give `done` (false when the
+item was not on the list), **read a list** gives `count` and `items`
+("Milk (2 l), Bread, Eggs"), handy in a message. The following actions of
+the scene find them in their variable list (written
+`{{<step>.<action>.<key>}}`, for instance `{{0.0.items}}` when
+**read a list** is the first action of the scene).
 
 ## Pace
 
